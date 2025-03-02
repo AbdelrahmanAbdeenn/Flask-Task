@@ -1,6 +1,6 @@
 from typing import Any, Dict, Generic, Type, TypeVar
 
-from entities.Entities import BaseEntity
+from domain.entities import BaseEntity
 
 E = TypeVar('E', bound='BaseEntity')
 
@@ -19,12 +19,12 @@ class baseRepo(Generic[E]):
     def get_all(self) -> list[E]:
         return list(items[self.name].values())
 
-    def get_by_id(self, id: int) -> Any:
+    def get_by_id(self, id: int) -> E | None:
         if self.name not in items:
             return None
         if id not in items[self.name]:
             return None
-        result = items[self.name][id]
+        result :E = items[self.name][id]
         return result
 
     def insert(self, entity: E) -> E:

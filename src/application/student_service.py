@@ -1,21 +1,23 @@
-from typing import Any, Optional
 
-from flask import jsonify, request
-from flask.views import MethodView
+from typing import Any, List, Optional
 
-from entities.Entities import Student
-from repos.StudentRepo import StudentRepo
+from flask import jsonify
+
+from domain.entities import Student
+from repos.student_repo import StudentRepo
 
 
-class StudentAPI(MethodView):
-    def get(self, id: Optional[int] = None) -> Any:
+class StudentService:
+    def __init__(self) -> None:
+        self.studentRepo = StudentRepo()
+
+    def get_student(self,id: Optional[int])-> Any:
         try:
-            studentRepo = StudentRepo()
             if id is None:
-                students = studentRepo.get_all()
+                students = self.studentRepo.get_all()
                 return list([student.to_dict()] for student in students)
             else:
-                student = studentRepo.get_by_id(id)
+                student = self.studentRepo.get_by_id(id)
                 if student is None:
                     return jsonify("Student not found"), 404
                 else:
@@ -23,41 +25,37 @@ class StudentAPI(MethodView):
         except Exception as e:
             return jsonify(str(e))
 
-    def post(self) -> Any:
+    def create_student(self,data: Any) -> Any:
         try:
-            data = request.get_json()
             student = Student(data['id'], data['name'], data['age'], data['grade'])
-            studentRepo = StudentRepo()
-            exists = studentRepo.get_by_id(data['id'])
+            exists = self.studentRepo.get_by_id(data['id'])
             if exists:
                 return jsonify("Student already exists"), 400
-            st = studentRepo.insert(student)
+            st = self.studentRepo.insert(student)
             return jsonify(st.to_dict())
         except Exception as e:
             return jsonify(str(e))
 
-    def put(self, id: int) -> Any:
+
+    def update_student(self,id: int, data: dict[str, Any]) -> Any:
         try:
-            data = request.get_json()
-            studentRepo = StudentRepo()
-            student = studentRepo.get_by_id(id)
+            student = self.studentRepo.get_by_id(id)
             if student is None:
                 return jsonify("Student not found"), 404
             student.name = data['name']
             student.age = data['age']
             student.grade = data['grade']
-            studentRepo.update(id, data)
+            self.studentRepo.update(id, data)
             return jsonify(student.to_dict())
         except Exception as e:
             return jsonify(str(e))
 
-    def delete(self, id: int) -> Any:
+    def delete_student(self, id: int) -> Any:
         try:
-            studentRepo = StudentRepo()
-            student = studentRepo.get_by_id(id)
+            student = self.studentRepo.get_by_id(id)
             if student is None:
                 return jsonify("Student not found"), 404
-            studentRepo.delete(id)
+            self.studentRepo.delete(id)
             return jsonify("Student deleted")
         except Exception as e:
             return jsonify(str(e))
