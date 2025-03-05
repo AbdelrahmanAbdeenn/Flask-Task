@@ -21,7 +21,7 @@ class StudentService:
                 if student is None:
                     return jsonify("Student not found"), 404
                 else:
-                    return jsonify(student.to_dict())
+                    return jsonify(student)
         except Exception as e:
             return jsonify(str(e))
 
@@ -32,7 +32,7 @@ class StudentService:
             if exists:
                 return jsonify("Student already exists"), 400
             st = self.studentRepo.insert(student)
-            return jsonify(st.to_dict())
+            return jsonify(st)
         except Exception as e:
             return jsonify(str(e))
 
@@ -46,7 +46,7 @@ class StudentService:
             student.age = data['age']
             student.grade = data['grade']
             self.studentRepo.update(id, data)
-            return jsonify(student.to_dict())
+            return jsonify(student)
         except Exception as e:
             return jsonify(str(e))
 
