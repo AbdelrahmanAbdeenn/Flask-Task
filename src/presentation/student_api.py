@@ -18,7 +18,6 @@ class StudentAPI(MethodView):
 
     def put(self, id: int) -> Any:
         return self.student_service.update(id, request.get_json())
-        
 
     def delete(self, id: int) -> Any:
         return self.student_service.delete(id)

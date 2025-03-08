@@ -6,12 +6,13 @@ class BaseEntity:
     def __init__(self, id: int):
         self.id = id
 
+
 @dataclass
 class Student(BaseEntity):
     age: int
     name: str
     grade: str
-    
+
     def __init__(self, id: int, name: str, age: int, grade: str):
         super().__init__(id)
         self.name = name

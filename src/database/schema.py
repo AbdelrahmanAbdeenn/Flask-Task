@@ -1,5 +1,6 @@
-from sqlalchemy import MetaData, Table, Column, Integer, String
-from src.database.db import metadata, engine
+from sqlalchemy import Column, Integer, String, Table
+
+from src.database.db import engine, metadata
 
 students = Table(
     'students', metadata,
@@ -7,5 +8,5 @@ students = Table(
     Column('name', String,),
     Column('age', Integer),
     Column('grade', String),
-)   
+)
 metadata.create_all(engine)
