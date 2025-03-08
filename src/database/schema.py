@@ -1,5 +1,5 @@
-from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String
-from database.db import metadata, engine
+from sqlalchemy import MetaData, Table, Column, Integer, String
+from src.database.db import metadata, engine
 
 students = Table(
     'students', metadata,
